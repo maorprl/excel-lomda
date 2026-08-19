@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Excel Analyst Course — Handoff</title>
+<style>
+:root{
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --text:#182033;
+  --muted:#667085;
+  --border:#e3e8f2;
+  --blue:#315efb;
+  --blue-soft:#eef3ff;
+  --green:#14804a;
+  --green-soft:#eaf7f0;
+  --orange:#b54708;
+  --orange-soft:#fff4e5;
+  --purple:#6941c6;
+  --purple-soft:#f4f0ff;
+  --teal:#0e7490;
+  --teal-soft:#ecfeff;
+  --red:#b42318;
+  --red-soft:#fff1f0;
+  --shadow:0 8px 24px rgba(20,30,55,.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,"Segoe UI",sans-serif;
+  line-height:1.75;
+}
+.container{max-width:1120px;margin:auto;padding:28px 22px 70px}
+.hero{
+  background:linear-gradient(135deg,#fff 0%,#eef3ff 100%);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:34px;
+  box-shadow:var(--shadow);
+  margin-bottom:24px;
+}
+.eyebrow{color:var(--blue);font-weight:800;font-size:.9rem;letter-spacing:.03em}
+h1{font-size:2.25rem;line-height:1.2;margin:.3rem 0 .8rem}
+h2{font-size:1.55rem;margin:0 0 14px}
+h3{font-size:1.15rem;margin:22px 0 8px}
+p{margin:9px 0}
+.small{font-size:.93rem;color:var(--muted)}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:25px;
+  margin:18px 0;
+  box-shadow:var(--shadow);
+}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.mini{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+  background:#fff;
+}
+.callout{
+  border-radius:14px;
+  padding:16px 18px;
+  margin:16px 0;
+  border-right:5px solid var(--blue);
+  background:var(--blue-soft);
+}
+.callout.success{border-color:var(--green);background:var(--green-soft)}
+.callout.warn{border-color:var(--orange);background:var(--orange-soft)}
+.callout.purple{border-color:var(--purple);background:var(--purple-soft)}
+.callout.teal{border-color:var(--teal);background:var(--teal-soft)}
+.callout.red{border-color:var(--red);background:var(--red-soft)}
+code,.code{
+  direction:ltr;
+  unicode-bidi:embed;
+  font-family:Consolas,"Courier New",monospace;
+}
+pre{
+  direction:ltr;
+  text-align:left;
+  white-space:pre-wrap;
+  background:#101828;
+  color:#f8fafc;
+  border-radius:14px;
+  padding:18px;
+  overflow:auto;
+  line-height:1.55;
+}
+table{width:100%;border-collapse:collapse;margin:14px 0}
+th,td{border-bottom:1px solid var(--border);padding:11px 10px;text-align:right;vertical-align:top}
+th{background:#f9fafb;font-weight:800}
+.ltr{direction:ltr;text-align:left}
+.badge{
+  display:inline-block;
+  padding:3px 9px;
+  border-radius:999px;
+  font-size:.82rem;
+  font-weight:800;
+  background:var(--blue-soft);
+  color:var(--blue);
+  margin:2px;
+}
+.toc a{color:var(--text);text-decoration:none}
+.toc a:hover{color:var(--blue)}
+.flow{
+  direction:ltr;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:18px 0;
+}
+.step{
+  border:1px solid var(--border);
+  background:white;
+  border-radius:999px;
+  padding:8px 13px;
+  font-weight:700;
+}
+.arrow{color:var(--blue);font-weight:900}
+.checklist li{margin:7px 0}
+ol li,ul li{margin:6px 0}
+.section-number{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--blue);color:#fff;display:inline-flex;
+  align-items:center;justify-content:center;font-weight:900;
+  margin-left:8px;
+}
+footer{margin-top:35px;color:var(--muted);text-align:center;font-size:.9rem}
+@media(max-width:760px){
+  .grid,.grid-3{grid-template-columns:1fr}
+  h1{font-size:1.8rem}
+  .hero,.card{padding:20px}
+}
+@media print{
+  body{background:#fff}
+  .container{max-width:none;padding:0}
+  .hero,.card{box-shadow:none;break-inside:avoid}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<section class="hero">
+  <div class="eyebrow">EXCEL ANALYST COURSE — MASTER HANDOFF</div>
+  <h1>מסמך המשכיות לקורס Excel ל־Data Analyst</h1>
+  <p>
+    מטרת המסמך היא לאפשר לצ׳אט חדש להמשיך את הקורס <strong>באותה שיטה, אותה פדגוגיה ואותה ארכיטקטורה</strong>,
+    בלי לבנות מחדש את התהליך ובלי להפוך את הלמידה לרשימת פונקציות.
+  </p>
+  <div class="callout success">
+    <strong>מצב נוכחי:</strong> מודול <span class="code">Data Discovery</span> הושלם.
+    המודול הבא הוא <span class="code">Data Cleaning</span>.
+  </div>
+</section>
+
+<section class="card toc">
+  <h2>תוכן עניינים</h2>
+  <ol>
+    <li><a href="#launch">איך להשתמש ב־Handoff בצ׳אט חדש</a></li>
+    <li><a href="#state">מצב הקורס וה־Roadmap</a></li>
+    <li><a href="#pedagogy">Protocol 1 — Course Workbook Architecture & Pedagogy</a></li>
+    <li><a href="#dataset">Protocol 2 — Practice Workbook / Dataset Generation & Interview Realism</a></li>
+    <li><a href="#html">Protocol 3 — HTML Chapter Output</a></li>
+    <li><a href="#workflow">Course Workflow — איך הכול מתחבר</a></li>
+    <li><a href="#next">הוראות התחלה למודול הבא: Data Cleaning</a></li>
+    <li><a href="#launchprompt">New Chat Launch Prompt</a></li>
+  </ol>
+</section>
+
+<section class="card" id="launch">
+  <h2><span class="section-number">1</span> איך להשתמש ב־Handoff בצ׳אט חדש</h2>
+  <p>בצ׳אט חדש יש לצרף, ככל האפשר:</p>
+  <ul class="checklist">
+    <li>את ה־Workbook המקורי ששימש ל־Data Discovery.</li>
+    <li>את <code>excel_data_discovery_master.html</code>.</li>
+    <li>את הקובץ הזה: <code>excel_analyst_course_handoff.html</code>.</li>
+  </ul>
+  <div class="callout">
+    <strong>הוראה לצ׳אט החדש:</strong> קודם לקרוא את ה־Handoff, אחר כך לבדוק את הקבצים המצורפים,
+    ורק אז להמשיך. אין לבקש מהלומד לשחזר היסטוריה שכבר מתועדת כאן.
+  </div>
+  <p class="small">
+    הקבצים הם מקור ההמשכיות: ה־Workbook הוא סביבת התרגול, ה־Master HTML הוא חומר הלימוד שכבר הושלם,
+    וה־Handoff מגדיר איך לבנות וללמד את המודולים הבאים.
+  </p>
+</section>
+
+<section class="card" id="state">
+  <h2><span class="section-number">2</span> מצב הקורס וה־Roadmap</h2>
+
+  <div class="grid">
+    <div class="mini">
+      <h3>Completed</h3>
+      <p><span class="badge">Data Discovery ✅</span></p>
+      <p>Course Chapters: <strong>01–12</strong></p>
+      <p class="small">
+        פרקי הקורס 11–12 ממופים ל־Exercises המקוריים 15 ו־17.
+        המספור בקורס רציף בכוונה ואינו חייב להיות זהה למספרי ה־Worksheets המקוריים.
+      </p>
+    </div>
+    <div class="mini">
+      <h3>Next</h3>
+      <p><span class="badge">Data Cleaning</span></p>
+      <p>המטרה: לעבור מ־“מה יש בקובץ?” ל־“האם הערכים עצמם מתנהגים בצורה שאפשר לסמוך עליה?”</p>
+    </div>
+  </div>
+
+  <h3>Capability Roadmap</h3>
+  <table>
+    <thead><tr><th>#</th><th>Capability</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td class="ltr">Data Discovery</td><td>✅ Complete</td></tr>
+      <tr><td>2</td><td class="ltr">Data Cleaning</td><td>← Next</td></tr>
+      <tr><td>3</td><td class="ltr">Row-level Calculations</td><td>Planned</td></tr>
+      <tr><td>4</td><td class="ltr">Conditional Logic</td><td>Planned</td></tr>
+      <tr><td>5</td><td class="ltr">Aggregation</td><td>Planned</td></tr>
+      <tr><td>6</td><td class="ltr">Lookup / Join</td><td>Planned</td></tr>
+      <tr><td>7</td><td class="ltr">PivotTables</td><td>Planned</td></tr>
+      <tr><td>8</td><td class="ltr">Business Analysis</td><td>Planned</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout purple">
+    <strong>Validation / QA</strong> היא יכולת רוחבית שחוזרת לאורך הקורס ולא חייבת להיות מודול עצמאי.
+    Exercise 18 המקורי מתאים במיוחד לאחר שכבר קיימים calculations ו־aggregations שאפשר reconcile.
+  </div>
+
+  <h3>Original Workbook Exercises — Deferred Mapping</h3>
+  <table>
+    <thead><tr><th>Original Exercise</th><th>Use Later In</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>13</td><td class="ltr">Data Cleaning</td><td>Data Quality Quick Scan</td></tr>
+      <tr><td>16</td><td class="ltr">Data Cleaning</td><td>Data Types</td></tr>
+      <tr><td>14</td><td class="ltr">Lookup / Join</td><td>Key Integrity before joining</td></tr>
+      <tr><td>11–12</td><td class="ltr">Business Analysis</td><td>Business question → data requirements / ambiguity</td></tr>
+      <tr><td>18</td><td class="ltr">Validation / QA</td><td>Reconciliation and pre-delivery checks</td></tr>
+      <tr><td>19</td><td class="ltr">Final Capstone</td><td>Full discovery + later capabilities</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="pedagogy">
+  <h2><span class="section-number">3</span> Protocol 1 — Course Workbook Architecture & Pedagogy</h2>
+
+  <div class="callout teal">
+    <strong>Core architecture:</strong> One capability module = one Excel Workbook.
+    One learning topic = one Worksheet / tab.
+  </div>
+
+  <h3>Workbook Structure</h3>
+  <ul>
+    <li>כל Module הוא קובץ <code>.xlsx</code> אחד.</li>
+    <li>כל נושא לימודי הוא Worksheet נפרד.</li>
+    <li>כל Worksheet הוא שיעור/תרגיל עצמאי עם מטרה אנליטית אחת ראשית.</li>
+    <li>שמות הלשוניות צריכים להיות מסודרים, קצרים ותיאוריים, למשל:
+      <code>01_DUPLICATES</code>, <code>02_MISSING_VALUES</code>, <code>03_TEXT_CLEANING</code>.</li>
+    <li>ה־Workbook צריך להרגיש כמו קורס אנליסטים עקבי, לא כמו אוסף datasets אקראיים.</li>
+  </ul>
+
+  <h3>Pedagogical Model</h3>
+  <div class="flow">
+    <div class="step">Problem</div><div class="arrow">→</div>
+    <div class="step">Investigation</div><div class="arrow">→</div>
+    <div class="step">Evidence</div><div class="arrow">→</div>
+    <div class="step">Discovery</div><div class="arrow">→</div>
+    <div class="step">Principle</div>
+  </div>
+
+  <div class="callout warn">
+    <strong>Do not reveal the lesson at the beginning.</strong>
+    ה־Worksheet צריך לאפשר ללומד להיתקל בבעיה, לבדוק אותה, לאסוף evidence ורק אז לנסח את העיקרון.
+  </div>
+
+  <h3>Every Worksheet Should Contain</h3>
+  <ul>
+    <li>Short business / analyst context.</li>
+    <li>Realistic source data.</li>
+    <li>One primary concept.</li>
+    <li>Purposeful but subtle traps/evidence.</li>
+    <li>Usually 4–7 discovery questions.</li>
+    <li>Enough information to solve the task directly in Excel.</li>
+    <li>No visible solutions and no obvious highlighting of the hidden issue.</li>
+  </ul>
+
+  <h3>Question Progression</h3>
+  <ol>
+    <li><strong>Observation:</strong> What do you see?</li>
+    <li><strong>Verification:</strong> How can you test it?</li>
+    <li><strong>Evidence:</strong> What proves the conclusion?</li>
+    <li><strong>Impact:</strong> Why does it matter analytically?</li>
+    <li><strong>Professional behavior:</strong> What would you check before trusting or changing the data?</li>
+  </ol>
+
+  <h3>Cumulative Learning</h3>
+  <div class="grid-3">
+    <div class="mini">
+      <strong>Data Discovery</strong>
+      <p>Which field appears to be the identifier?</p>
+    </div>
+    <div class="mini">
+      <strong>Data Cleaning</strong>
+      <p>Does that identifier actually behave as a unique key?</p>
+    </div>
+    <div class="mini">
+      <strong>Lookup / Join</strong>
+      <p>Is that key safe to use in a relationship?</p>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <strong>Principle:</strong> Modules must build on prior mental models instead of restarting from zero.
+  </div>
+
+  <h3>Language Rules</h3>
+  <ul>
+    <li>Chat explanations: <strong>Hebrew</strong>.</li>
+    <li>Excel functions, menu names, formulas and technical terms: <strong>English</strong>.</li>
+    <li>Workbook content, datasets and questions: <strong>English</strong>.</li>
+  </ul>
+</section>
+
+<section class="card" id="dataset">
+  <h2><span class="section-number">4</span> Protocol 2 — Practice Workbook / Dataset Generation & Interview Realism</h2>
+
+  <h3>General Rules</h3>
+  <ul>
+    <li>Build real <code>.xlsx</code> practice workbooks, not screenshots or pseudo-tables, whenever hands-on work is useful.</li>
+    <li>The workbook is for independent practice, not a solved example.</li>
+    <li>Do not include solutions, answer sheets, completed formulas or obvious hints unless explicitly requested.</li>
+    <li>Prefer realistic analyst domains: orders, customers, products, regions, status, dates, revenue, cost, etc.</li>
+    <li>Data size should be manageable but meaningful — enough rows for patterns to exist and for mistakes not to be immediately obvious.</li>
+    <li>Preserve clear row grain and intentional relationships.</li>
+  </ul>
+
+  <h3>Purpose-built Data</h3>
+  <div class="callout">
+    <strong>Every irregularity must teach something.</strong>
+    Do not add random bad data just to make the workbook “harder”.
+  </div>
+
+  <p>Examples of deliberate evidence:</p>
+  <pre>Transaction_ID
+TX001
+TX002
+TX003
+TX003   ← deliberate duplicate
+TX005</pre>
+
+  <pre>Region
+North
+South
+North
+NORTH   ← deliberate label inconsistency
+West</pre>
+
+  <pre>Revenue
+950
+1200
+"950"   ← number-like text
+875</pre>
+
+  <p>
+    הבעיה צריכה להיות מוטמעת בנתונים ולא מסומנת מראש בצבע אדום או במילה <code>ERROR</code>,
+    אלא אם זיהוי indicator כזה הוא בדיוק הנושא הנלמד.
+  </p>
+
+  <h3>Grain and Relationships</h3>
+  <p>ה־dataset חייב לשמור על grain הגיוני. לדוגמה:</p>
+  <pre>One row = one order line
+
+Line_ID      → row-level identifier
+Order_ID     → may repeat
+Customer_ID  → may repeat
+Product_ID   → may repeat</pre>
+
+  <p>כאשר נדרשים joins, השתמש בטבלאות נפרדות:</p>
+  <pre>Sales.Product_ID   → Products.Product_ID
+Sales.Customer_ID  → Customers.Customer_ID</pre>
+
+  <p>
+    כאשר הנושא הוא key integrity, אפשר להכניס בכוונה בעיה ממוקדת כגון duplicate lookup key,
+    blank foreign key או unmatched key — אבל לא להפוך את כל הנתונים לשבורים.
+  </p>
+
+  <h3>Module-specific Dataset Design</h3>
+  <table>
+    <thead><tr><th>Module</th><th>Dataset behavior</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="ltr">Data Cleaning</td>
+        <td>Controlled duplicates, blanks, inconsistent labels, spaces, text-numbers, text-dates, invalid or suspicious values.</td>
+      </tr>
+      <tr>
+        <td class="ltr">Row-level Calculations</td>
+        <td>Raw inputs such as Units, Unit_Price, Unit_Cost, Discount; derived columns left blank for the learner.</td>
+      </tr>
+      <tr>
+        <td class="ltr">Conditional Logic</td>
+        <td>Enough row combinations to exercise every branch of IF/IFS-type business rules.</td>
+      </tr>
+      <tr>
+        <td class="ltr">Aggregation</td>
+        <td>Repeated dimensions and multiple rows per group so SUMIFS/COUNTIFS/Pivot-style summaries are meaningful.</td>
+      </tr>
+      <tr>
+        <td class="ltr">Lookup / Join</td>
+        <td>Multiple related tables with intentional 1:M relationships and validation opportunities.</td>
+      </tr>
+      <tr>
+        <td class="ltr">PivotTables</td>
+        <td>Rich flat data spanning dates, products, regions and measures; prefer real PivotTable practice.</td>
+      </tr>
+      <tr>
+        <td class="ltr">Business Analysis</td>
+        <td>Enough variation for top/bottom, trend, segment, profitability and interpretation questions.</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <h3>Interview Realism & Question Design</h3>
+  <div class="callout purple">
+    <strong>Hard rule:</strong> Do not design the worksheet around an Excel function.
+    Design it around an analyst problem.
+  </div>
+
+  <p>
+    כל Worksheet צריך לדמות מצב אמיתי של <span class="code">Data Analyst interview</span>,
+    <span class="code">Excel take-home assignment</span> או חקירה של Workbook שקיבלת ממישהו אחר.
+    השאלות צריכות לבדוק reasoning והתנהגות מקצועית — לא שינון פונקציות.
+  </p>
+
+  <h3>Question Design</h3>
+  <p>כל Worksheet יכיל בדרך כלל 4–7 שאלות, המתקדמות דרך כמה שכבות:</p>
+  <ol>
+    <li><strong>Discovery:</strong> What do you notice about the data or workbook?</li>
+    <li><strong>Verification:</strong> How would you prove whether that observation is true?</li>
+    <li><strong>Analytical Risk:</strong> Could this issue change a count, total, join, KPI, or conclusion?</li>
+    <li><strong>Excel Investigation:</strong> Which Excel tool, formula behavior, or workbook feature would you inspect?</li>
+    <li><strong>Professional Judgment:</strong> What would you do before editing, cleaning, joining, refreshing, or presenting?</li>
+    <li><strong>Communication:</strong> When appropriate, explain the finding as if reporting it to a manager or interviewer.</li>
+  </ol>
+
+  <h3>Interview-style Traps</h3>
+  <p>
+    יש לשלב מלכודות ריאליסטיות הדומות למה שאנליסט עלול לפספס תחת לחץ זמן.
+    המלכודת צריכה להיות סבירה, לא puzzle מלאכותי.
+  </p>
+  <ul>
+    <li>A candidate key that looks unique but contains one duplicate.</li>
+    <li>A valid formula that stops before the final source row.</li>
+    <li>A numeric-looking value stored as text.</li>
+    <li>An inconsistent category label that splits one logical group.</li>
+    <li>A hidden row that still belongs to the requested business population.</li>
+    <li>A lookup key that exists on one side but not the other.</li>
+    <li>A KPI that is mathematically correct today but hardcoded.</li>
+    <li>Stale refresh evidence or inconsistent freshness clues.</li>
+    <li>An ambiguous business question with no defined metric.</li>
+    <li>A repeated <code>Order_ID</code> where the true grain is order-line level.</li>
+  </ul>
+
+  <div class="callout warn">
+    <strong>Traps must be plausible.</strong>
+    The learner should be able to detect them using normal Excel inspection,
+    analytical reasoning and validation — not by guessing what the course designer hid.
+  </div>
+
+  <h3>Question Wording</h3>
+  <p><strong>Prefer realistic prompts:</strong></p>
+  <pre>Can this field safely be used as a unique identifier?
+
+What would you verify before using this table in a lookup?
+
+Would you trust the displayed total? Why or why not?
+
+What evidence suggests the workbook may not be fully refreshed?
+
+Which records would be excluded if you analyzed only what is visible?</pre>
+
+  <p><strong>Avoid textbook prompts such as:</strong></p>
+  <pre>Use COUNTIF to find duplicates.</pre>
+
+  <p>
+    ה־capability הוא מה שנבחן. הפונקציה או הכלי המתאימים צריכים לצמוח מתוך הבעיה,
+    ולא להיות מוכתבים מראש אלא אם זה חלק מפורש מההערכה.
+  </p>
+
+  <h3>Assessment Mindset</h3>
+  <p>לכל Worksheet צריכה להיות שאלה סמויה מצד המראיין:</p>
+  <div class="callout teal">
+    <strong>“What professional capability would an interviewer learn about the candidate from this task?”</strong>
+  </div>
+
+  <p>דוגמאות למה שהתרגיל עשוי לבדוק:</p>
+  <ul>
+    <li>Attention to grain.</li>
+    <li>Data-quality skepticism.</li>
+    <li>Formula auditing.</li>
+    <li>Validation habits.</li>
+    <li>Key integrity.</li>
+    <li>Business-definition awareness.</li>
+    <li>Ability to distinguish evidence from assumptions.</li>
+  </ul>
+
+  <p>אין לתגמל רק הגעה למספר הנכון. פתרון חזק צריך גם להדגים:</p>
+  <ul>
+    <li>Correct reasoning.</li>
+    <li>Correct population / grain.</li>
+    <li>Auditability.</li>
+    <li>Appropriate validation.</li>
+    <li>Awareness of risks and assumptions.</li>
+  </ul>
+
+  <h3>Difficulty Progression</h3>
+  <div class="flow">
+    <div class="step">Isolated concept</div><div class="arrow">→</div>
+    <div class="step">Several issues</div><div class="arrow">→</div>
+    <div class="step">Interacting risks</div><div class="arrow">→</div>
+    <div class="step">Capstone</div>
+  </div>
+
+  <div class="callout purple">
+    Early tabs should teach one concept cleanly. Later tabs should combine prior ideas such as grain, key behavior,
+    data types, joins, formula behavior and business definitions.
+  </div>
+</section>
+
+<section class="card" id="html">
+  <h2><span class="section-number">5</span> Protocol 3 — HTML Chapter Output</h2>
+
+  <div class="callout success">
+    <strong>Excel = practice environment.</strong><br>
+    <strong>HTML = permanent learning summary created only after the worksheet is completed.</strong>
+  </div>
+
+  <h3>When to Create</h3>
+  <p>Do not create the chapter before the exercise is completed.</p>
+  <div class="flow">
+    <div class="step">Attempt</div><div class="arrow">→</div>
+    <div class="step">Review / Hints</div><div class="arrow">→</div>
+    <div class="step">Full Solution</div><div class="arrow">→</div>
+    <div class="step">Discussion</div><div class="arrow">→</div>
+    <div class="step">HTML Chapter</div>
+  </div>
+
+  <h3>Required Chapter Content</h3>
+  <ul>
+    <li>Course chapter title and original worksheet/tab name.</li>
+    <li>Short analytical/business context.</li>
+    <li>Relevant source data or representative table.</li>
+    <li>Original exercise questions.</li>
+    <li>Final answer to every question.</li>
+    <li><strong>How do we know?</strong> for important conclusions.</li>
+    <li>Excel evidence and relevant formulas.</li>
+    <li>Exact Excel menu/tool paths when useful.</li>
+    <li>Visual flows / comparison cards for tricky logic.</li>
+    <li>Common mistakes and confusing distinctions.</li>
+    <li>Validation / reconciliation where relevant.</li>
+    <li>Analyst mindset / professional interpretation.</li>
+    <li>Key Takeaway near the end — never as a spoiler at the top.</li>
+  </ul>
+
+  <h3>Preferred Pedagogical Order</h3>
+  <div class="flow">
+    <div class="step">Problem</div><div class="arrow">→</div>
+    <div class="step">Investigation</div><div class="arrow">→</div>
+    <div class="step">Evidence</div><div class="arrow">→</div>
+    <div class="step">Explanation</div><div class="arrow">→</div>
+    <div class="step">Conclusion</div><div class="arrow">→</div>
+    <div class="step">Takeaway</div>
+  </div>
+
+  <div class="callout warn">
+    <strong>Do not over-compress.</strong>
+    הפרק צריך להיות מספיק מפורט כדי שאפשר יהיה לחזור אליו חודשים אחר כך בלי לפתוח את השיחה המקורית.
+  </div>
+
+  <h3>Substantial Question Structure</h3>
+  <pre>Question
+Answer
+How do we know?
+Why does it matter?
+Common mistake / trap</pre>
+
+  <h3>Real vs Simulated Evidence</h3>
+  <p>
+    אם worksheet מדגים משהו שאינו object חי ב־Excel, חובה לומר זאת במפורש.
+    לדוגמה: snapshot שמדמה PivotTable, hardcoded refresh clue, historical formula evidence, או text שמתאר query.
+  </p>
+  <div class="callout red">
+    Never imply that a live Excel object exists when the exercise only contains simulated or recorded evidence.
+  </div>
+
+  <h3>Visual Style</h3>
+  <ul>
+    <li>Static HTML — not a quiz app, dashboard or learning product.</li>
+    <li>RTL Hebrew layout.</li>
+    <li>Light background, white card sections, blue accent.</li>
+    <li>Rounded borders, subtle shadows, clear callouts.</li>
+    <li>Responsive and print-friendly.</li>
+    <li>Data tables and formulas LTR where appropriate.</li>
+    <li>Consistent design across all chapters and modules.</li>
+  </ul>
+
+  <h3>Naming & Numbering</h3>
+  <p>Course numbering is sequential and independent of original workbook exercise numbers.</p>
+  <pre>chapter_01_duplicates_summary.html
+chapter_02_missing_values_summary.html
+chapter_03_data_types_summary.html</pre>
+
+  <p>Inside the page, preserve the original worksheet reference when relevant:</p>
+  <pre>Course Chapter 03
+Original Worksheet: 05_DATA_TYPES</pre>
+
+  <h3>Module Master HTML</h3>
+  <p>After the module is complete:</p>
+  <ul>
+    <li>Combine every completed chapter into one full Module Master HTML.</li>
+    <li>Do not replace chapters with short summaries; preserve the full content.</li>
+    <li>Add Table of Contents, Previous / Next and Back to Contents navigation.</li>
+    <li>Keep both the individual chapter HTML files and the combined Master.</li>
+  </ul>
+
+  <p>Example:</p>
+  <pre>excel_data_cleaning_master.html</pre>
+</section>
+
+<section class="card" id="workflow">
+  <h2><span class="section-number">6</span> Course Workflow — איך שלושת הפרוטוקולים מתחברים</h2>
+
+  <h3>Per Topic / Worksheet</h3>
+  <div class="flow">
+    <div class="step">Build Worksheet</div><div class="arrow">→</div>
+    <div class="step">Learner Attempt</div><div class="arrow">→</div>
+    <div class="step">Review / Hints</div><div class="arrow">→</div>
+    <div class="step">Full Solution</div><div class="arrow">→</div>
+    <div class="step">Detailed Discussion</div><div class="arrow">→</div>
+    <div class="step">HTML Chapter</div><div class="arrow">→</div>
+    <div class="step">Next Worksheet</div>
+  </div>
+
+  <h3>Per Module</h3>
+  <div class="flow">
+    <div class="step">All Worksheets Complete</div><div class="arrow">→</div>
+    <div class="step">All HTML Chapters Complete</div><div class="arrow">→</div>
+    <div class="step">Combine Master HTML</div><div class="arrow">→</div>
+    <div class="step">Update Handoff</div><div class="arrow">→</div>
+    <div class="step">Next Module</div>
+  </div>
+
+  <div class="callout">
+    Default learning mode is guided/self-practice: preserve the exercise first.
+    Give the full solution only after an attempt or when the learner explicitly asks for it.
+  </div>
+</section>
+
+<section class="card" id="next">
+  <h2><span class="section-number">7</span> הוראות התחלה למודול הבא — Data Cleaning</h2>
+
+  <div class="callout teal">
+    <strong>Transition:</strong><br>
+    Data Discovery asked: “What is in this workbook, and how is it structured?”<br>
+    Data Cleaning asks: “Can I trust the actual values inside that structure?”
+  </div>
+
+  <h3>Build a New Module Workbook</h3>
+  <p>
+    המודול הבא צריך להיות Workbook חדש ומסודר, שבו כל נושא הוא Worksheet נפרד.
+    אל תסתפק ב־Exercise 13 ו־16 בלבד; אפשר להשתמש בהם כהשראה / anchor,
+    אך המטרה היא לבנות מודול שלם לפי הפדגוגיה שהוגדרה כאן.
+  </p>
+
+  <h3>Recommended Starting Architecture</h3>
+  <pre>01_DUPLICATES
+02_MISSING_VALUES
+03_TEXT_CLEANING
+04_INCONSISTENT_LABELS
+05_DATA_TYPES
+06_QUALITY_SCAN
+07_CLEANING_CAPSTONE</pre>
+
+  <p class="small">
+    זו ארכיטקטורת פתיחה מומלצת, לא חובה קשיחה. אפשר לשנות את מספר הלשוניות אם יש הצדקה פדגוגית,
+    אך חייבים לשמור על topic-per-tab, progression ו־cumulative learning.
+  </p>
+
+  <h3>Pedagogical Bridge from Data Discovery</h3>
+  <div class="grid">
+    <div class="mini">
+      <strong>Earlier</strong>
+      <p>Which column appears to be the row identifier?</p>
+    </div>
+    <div class="mini">
+      <strong>Now</strong>
+      <p>Does that identifier actually behave as a unique key?</p>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <strong>Key transition:</strong><br>
+    עד עכשיו בדקנו אם ה־Workbook בנוי נכון.<br>
+    עכשיו מתחילים לבדוק אם ה־data שבתוכו מתנהג נכון.
+  </div>
+
+  <h3>Data Cleaning Topics Should Teach</h3>
+  <ul>
+    <li>Duplicate detection and key behavior.</li>
+    <li>Missing values and analytical impact.</li>
+    <li>Whitespace / text normalization.</li>
+    <li>Inconsistent labels and category fragmentation.</li>
+    <li>Underlying data types: dates, numbers, percentages, booleans, codes.</li>
+    <li>Quality scan before analysis.</li>
+    <li>Capstone combining several issues without obvious labels.</li>
+  </ul>
+
+  <h3>Important Design Rule</h3>
+  <div class="callout warn">
+    Do not write “this worksheet contains a duplicate / text-number / bad date”.
+    Let the learner discover the issue through the questions and Excel evidence.
+  </div>
+</section>
+
+<section class="card" id="launchprompt">
+  <h2><span class="section-number">8</span> New Chat Launch Prompt</h2>
+  <p>אפשר לפתוח צ׳אט חדש עם הקבצים ולשלוח את הטקסט הבא:</p>
+
+  <pre>Continue my Excel Data Analyst course using the attached handoff.
+
+Read the handoff first, then inspect the attached completed Data Discovery
+Master HTML and the relevant workbook files.
+
+Do not redesign the learning method.
+
+Follow the three protocols in the handoff:
+1. Course Workbook Architecture & Pedagogy
+2. Practice Workbook / Dataset Generation
+3. HTML Chapter Output
+
+Start the next module: Data Cleaning.
+
+Build it as one Excel course workbook where each learning topic is a separate
+worksheet/tab. Preserve the established pedagogy:
+Problem → Investigation → Evidence → Discovery → Principle.
+
+The workbook content and exercises should be in English.
+Explain and coach me in Hebrew, while keeping Excel terminology,
+functions and menu names in English.
+
+Do not reveal the final lesson at the beginning of a worksheet.
+Let me investigate first. Default to guided practice and only give the full
+solution after my attempt or when I explicitly ask for it.
+
+After we fully complete each worksheet, create a detailed static HTML chapter
+using the established chapter protocol. At the end of the module, combine all
+chapters into a Module Master HTML.</pre>
+</section>
+
+<footer>
+  Excel Analyst Course — Handoff • Data Discovery complete • Next: Data Cleaning
+</footer>
+
+</div>
+</body>
+</html>

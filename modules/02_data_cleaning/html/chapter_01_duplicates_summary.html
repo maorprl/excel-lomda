@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Excel Data Cleaning — Chapter 01 · Duplicate Detection</title>
+<style>
+:root{
+  --bg:#f6f8fb;--surface:#ffffff;--text:#172033;--muted:#637083;--line:#dfe5ec;
+  --accent:#315efb;--accent-soft:#eef2ff;--good:#176b4d;--good-soft:#eaf7f1;
+  --warn:#8a5b00;--warn-soft:#fff7e6;--danger:#a83a3a;--danger-soft:#fff0f0;
+  --purple:#6b46c1;--purple-soft:#f5f0ff;--teal:#0f6d75;--teal-soft:#eaf8f9;
+  --code:#f1f4f8;--shadow:0 10px 30px rgba(26,39,61,.07)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Noto Sans Hebrew",sans-serif;line-height:1.72}
+.page{max-width:1080px;margin:0 auto;padding:40px 24px 64px}
+header{background:linear-gradient(135deg,#fff 0%,#f5f7ff 100%);border:1px solid var(--line);border-radius:22px;padding:34px 36px;box-shadow:var(--shadow);margin-bottom:24px}
+.eyebrow{display:inline-block;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;margin-bottom:12px}
+h1{margin:0 0 8px;font-size:clamp(30px,5vw,48px);line-height:1.15}.subtitle{color:var(--muted);font-size:18px;margin:0;max-width:930px}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-size:13px;color:#3d4a5f}
+section{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px 30px;box-shadow:var(--shadow);margin-top:20px}
+h2{font-size:24px;margin:0 0 14px}h3{font-size:18px;margin:18px 0 7px}p{margin:0 0 12px}
+ul{margin:10px 0 0;padding-right:22px}li{margin:7px 0}
+code{direction:ltr;unicode-bidi:isolate;background:var(--code);border-radius:6px;padding:2px 6px;font-family:Consolas,"SFMono-Regular",monospace;font-size:.94em}
+.formula{direction:ltr;text-align:left;font-family:Consolas,"Courier New",monospace;background:var(--code);border-radius:10px;padding:12px 14px;margin-top:10px;overflow-x:auto;white-space:pre-wrap}
+.callout{border-right:4px solid var(--accent);background:var(--accent-soft);padding:16px 18px;border-radius:12px;margin-top:14px}.warning{border-right-color:#c78600;background:var(--warn-soft);color:#6a4700}.success{border-right-color:var(--good);background:var(--good-soft);color:#15533d}.purple{border-right-color:var(--purple);background:var(--purple-soft);color:#4c3290}.teal{border-right-color:var(--teal);background:var(--teal-soft);color:#0b565d}.danger{border-right-color:var(--danger);background:var(--danger-soft);color:#792929}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;margin-top:12px}table{width:100%;border-collapse:collapse;min-width:760px;direction:ltr;text-align:left;background:#fff}th,td{padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:14px}th{background:#f0f4f9;font-weight:700;color:#26364b}tr:last-child td{border-bottom:0}.num{text-align:right;font-variant-numeric:tabular-nums}.changed{background:#fff4e5;font-weight:700}.same{background:#f4fbf8}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}.card{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fbfcfe}.card .term{direction:ltr;unicode-bidi:isolate;font-weight:800;color:var(--accent);margin-bottom:8px}.role{display:inline-block;border-radius:999px;padding:4px 9px;font-weight:700;font-size:12px;background:var(--accent-soft);color:var(--accent);margin-bottom:8px}
+.qa{display:grid;gap:14px;margin-top:16px}.qa-item{border:1px solid var(--line);border-radius:14px;padding:20px;background:#fbfcfe}.question{font-weight:700;margin-bottom:8px;direction:ltr;unicode-bidi:isolate;text-align:left}.answer-label{color:var(--good);font-weight:700;font-size:13px;margin-bottom:4px}
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;direction:ltr;margin-top:14px}.flow span{border:1px solid var(--line);background:#fbfcfe;border-radius:10px;padding:8px 12px;font-family:Consolas,monospace}.flow .arrow{border:none;background:transparent;padding:0;color:var(--muted)}
+.tool-path{direction:ltr;unicode-bidi:isolate;font-weight:700}.small{font-size:13px;color:var(--muted)}.ltr{direction:ltr;unicode-bidi:isolate;text-align:left}.center{text-align:center}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}.compare .side{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fbfcfe}.compare .good{background:#f4fbf8}.compare .bad{background:#fff8f8}
+.checklist{counter-reset:item;display:grid;gap:10px;margin-top:15px}.check{position:relative;border:1px solid var(--line);background:#fbfcfe;border-radius:12px;padding:14px 16px 14px 52px;direction:ltr;text-align:left}.check:before{counter-increment:item;content:counter(item);position:absolute;left:14px;top:14px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-weight:800}
+.mini-toc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.mini-toc a{text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fbfcfe}.mini-toc a:hover{border-color:var(--accent);background:#f7f9ff}.section-num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--accent-soft);color:var(--accent);font-weight:800;margin-left:8px;direction:ltr}
+footer{color:var(--muted);text-align:center;font-size:13px;margin-top:24px}.back-top{position:fixed;left:18px;bottom:18px;text-decoration:none;background:#172033;color:#fff;border-radius:999px;padding:10px 14px;font-size:13px;font-weight:700;box-shadow:0 8px 22px rgba(0,0,0,.15);z-index:10}
+@media(max-width:820px){.grid,.grid3,.compare,.mini-toc{grid-template-columns:1fr}section,header{padding:22px 20px}.check{padding-left:50px}.back-top{left:10px;bottom:10px}}
+@media print{body{background:#fff}.page{max-width:none;padding:0}header,section{box-shadow:none;break-inside:avoid}.back-top{display:none}}
+</style>
+</head>
+<body id="top">
+<div class="page">
+<header>
+  <div class="eyebrow">Excel Data Cleaning · Chapter 01</div>
+  <h1><span dir="ltr">Duplicate Detection in an Order-Line Export</span></h1>
+  <p class="subtitle">פרק פתרון והסבר מלא ל־<span dir="ltr">01_DUPLICATES</span>: איך מגדירים grain ו־key, מזהים repeated keys, מבדילים בין exact duplicate ל־key conflict, מאמתים את הבדיקה ומחליטים מתי מותר להסיר שורה.</p>
+  <div class="meta">
+    <span class="chip">Original Worksheet: <span dir="ltr">01_DUPLICATES</span></span>
+    <span class="chip">Mode: Skill Acquisition</span>
+    <span class="chip">Capability: Key Integrity · Duplicate Detection · Validation</span>
+    <span class="chip">Static HTML · RTL Hebrew + Excel English</span>
+  </div>
+</header>
+
+<section id="contents">
+  <h2>מפת הפרק</h2>
+  <div class="mini-toc">
+    <a href="#problem">1 · הבעיה העסקית</a><a href="#grain">2 · Grain & Key</a>
+    <a href="#countif">3 · COUNTIF</a><a href="#classify">4 · Classify Duplicates</a>
+    <a href="#validation">5 · Sanity Check</a><a href="#remove">6 · Remove Duplicates</a>
+    <a href="#alternatives">7 · IF / FILTER / SQL</a><a href="#mistakes">8 · Common Mistakes</a>
+  </div>
+</section>
+
+<section id="problem">
+  <h2><span class="section-num">1</span>הבעיה העסקית</h2>
+  <p>Operations שולחת export של שורות הזמנה לחודש April. הקובץ עומד להזין sales summary, ולכן לפני שמסכמים <code>Units</code> או <code>Line_Revenue</code> צריך לבדוק שה־row-level key מתנהג כמו key אמיתי.</p>
+  <div class="callout">
+    <strong>השאלה האנליטית:</strong> האם יש ערכים שחוזרים במקום שבו ציפינו ל־uniqueness, ואם כן — האם מדובר בשורה כפולה שאפשר להסיר או ב־data conflict שאסור למחוק אוטומטית?
+  </div>
+  <div class="flow" aria-label="Chapter logic">
+    <span>Define Grain</span><b class="arrow">→</b><span>Test Key</span><b class="arrow">→</b><span>Isolate Repeats</span><b class="arrow">→</b><span>Compare Rows</span><b class="arrow">→</b><span>Classify</span><b class="arrow">→</b><span>Decide</span><b class="arrow">→</b><span>Validate</span>
+  </div>
+</section>
+
+<section id="grain">
+  <h2><span class="section-num">2</span><span dir="ltr">Grain & Key</span></h2>
+  <div class="qa">
+    <article class="qa-item">
+      <div class="question">What should one row represent?</div>
+      <div class="answer-label">תשובה</div>
+      <p><strong>One row represents one order line.</strong></p>
+      <p>כל שורה היא line item אחד בתוך הזמנה. לכן ה־grain הוא <span dir="ltr">Order Line</span>.</p>
+      <h3>How do we know?</h3>
+      <p>אותו <code>Order_ID</code> יכול להופיע בכמה שורות עם מוצרים שונים. זה מתאים למערכת יחסים של Order אחד עם כמה Order Lines.</p>
+    </article>
+    <article class="qa-item">
+      <div class="question">Which field should behave as the row-level key?</div>
+      <div class="answer-label">תשובה</div>
+      <p><strong><code>Line_ID</code></strong> אמור להיות unique ברמת השורה.</p>
+      <p><code>Order_ID</code> הוא parent key ולכן repetition שלו לא מוכיחה duplicate.</p>
+      <div class="callout warning"><strong>Trap:</strong> repeated value אינו בהכרח duplicate. קודם בודקים אם השדה אמור להיות unique ב־grain הנוכחי.</div>
+    </article>
+  </div>
+</section>
+
+<section id="countif">
+  <h2><span class="section-num">3</span>בדיקת uniqueness עם <span dir="ltr">COUNTIF</span></h2>
+  <p>Visual scan לא מספיק כשיש הרבה שורות. אנחנו רוצים helper column שנותנת לכל row את מספר הפעמים שבהן ה־<code>Line_ID</code> שלה מופיע בטווח המלא.</p>
+  <div class="formula">COUNTIF(range, criteria)</div>
+  <p>ב־worksheet הנתונים נמצאים בשורות <code>36:96</code>, ו־<code>Line_ID</code> בעמודה <code>A</code>. לכן הנוסחה בשורה הראשונה של הנתונים היא:</p>
+  <div class="formula">=COUNTIF($A$36:$A$96,A36)</div>
+  <div class="grid">
+    <article class="card">
+      <div class="term">$A$36:$A$96</div>
+      <p><strong>ה־range המלא.</strong> ה־<code>$</code> נועלים row ו־column כדי שהטווח לא יזוז בזמן <span dir="ltr">Fill Down</span>.</p>
+    </article>
+    <article class="card">
+      <div class="term">A36</div>
+      <p><strong>ה־criteria של השורה הנוכחית.</strong> הוא נשאר relative כדי להפוך ל־<code>A37</code>, <code>A38</code> וכן הלאה.</p>
+    </article>
+  </div>
+  <div class="callout success">
+    <strong>פירוש התוצאה:</strong> <code>1</code> = ה־key מופיע פעם אחת. <code>&gt;1</code> = repeated key שדורש בדיקה נוספת.
+  </div>
+  <h3>Structured Reference — חלופה כשעמודת העזר נמצאת בתוך Excel Table</h3>
+  <div class="formula">=COUNTIF([Line_ID],[@Line_ID])</div>
+  <p class="small">הנוסחה הזו מתאימה רק כאשר <code>Line_ID_Count</code> היא באמת חלק מה־Excel Table. אם היא מחוץ ל־Table, השתמש ב־A1 references או ב־table-qualified reference.</p>
+  <h3>Formatting troubleshooting</h3>
+  <p>אם התוצאות מופיעות כ־<code>$1.00</code> ו־<code>$2.00</code>, הנוסחה לא שגויה — התא פשוט קיבל <span dir="ltr">Currency</span> format. תקן דרך <span class="tool-path">Right Click → Format Cells → General</span> או <span dir="ltr">Number</span>.</p>
+</section>
+
+<section id="classify">
+  <h2><span class="section-num">4</span><span dir="ltr">Detection ≠ Classification</span></h2>
+  <p>אחרי שמסננים <code>Line_ID_Count &gt; 1</code>, עדיין לא יודעים אם הרשומות הן exact duplicates. עכשיו משווים את שאר ה־source fields.</p>
+  <div class="table-wrap">
+    <table aria-label="Repeated Line IDs and their source values">
+      <thead><tr><th>Line_ID</th><th>Order_ID</th><th>Order_Date</th><th>Customer_ID</th><th>Product</th><th>Region</th><th>Units</th><th>Unit_Price</th><th>Line_Revenue</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr class="same"><td>L0017</td><td>O3009</td><td>2026-04-06</td><td>C0117</td><td>Webcam</td><td>South</td><td class="num">3</td><td class="num">99</td><td class="num">297</td><td>Shipped</td></tr>
+        <tr class="same"><td>L0017</td><td>O3009</td><td>2026-04-06</td><td>C0117</td><td>Webcam</td><td>South</td><td class="num">3</td><td class="num">99</td><td class="num">297</td><td>Shipped</td></tr>
+        <tr><td>L0034</td><td>O3020</td><td>2026-04-23</td><td>C0119</td><td>Laptop Stand</td><td>North</td><td class="num changed">5</td><td class="num">79</td><td class="num changed">395</td><td class="changed">Shipped</td></tr>
+        <tr><td>L0034</td><td>O3020</td><td>2026-04-23</td><td>C0119</td><td>Laptop Stand</td><td>North</td><td class="num changed">2</td><td class="num">79</td><td class="num changed">158</td><td class="changed">Completed</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="compare">
+    <div class="side good">
+      <span class="role">Exact duplicate row</span>
+      <h3><code>L0017</code></h3>
+      <p>שתי הרשומות זהות בכל source column. זה תואם duplicate טכני של אותה שורה.</p>
+    </div>
+    <div class="side bad">
+      <span class="role">Duplicate key with conflicting attributes</span>
+      <h3><code>L0034</code></h3>
+      <p>אותו <code>Line_ID</code>, אבל <code>Units</code>, <code>Line_Revenue</code> ו־<code>Status</code> שונים. אין לנו בסיס לבחור לבד איזו שורה נכונה.</p>
+    </div>
+  </div>
+  <div class="callout danger"><strong>Professional decision:</strong> conflict כזה הוא <span dir="ltr">flag for investigation</span>, לא candidate למחיקה אוטומטית. סביר שמדובר ב־input/upstream data issue, אבל צריך evidence נוסף כדי להחליט מה נכון.</div>
+</section>
+
+<section id="validation">
+  <h2><span class="section-num">5</span><span dir="ltr">Sanity Check / Validation</span></h2>
+  <p>אחרי ה־<code>COUNTIF</code> אפשר להריץ detector שני ועצמאי:</p>
+  <div class="formula">Home → Conditional Formatting → Highlight Cells Rules → Duplicate Values</div>
+  <p>בחר רק את תאי הנתונים של <code>Line_ID</code>. התוצאה הוויזואלית אמורה להצביע על אותם repeated keys שמצאת דרך <code>Line_ID_Count &gt; 1</code>.</p>
+  <div class="grid">
+    <article class="card"><div class="term">COUNTIF</div><p>נותן count, אפשר לסנן, למיין ולהשאיר audit trail.</p></article>
+    <article class="card"><div class="term">Conditional Formatting</div><p>נותן quick visual scan ומשמש cross-check מהיר לשיטה העיקרית.</p></article>
+  </div>
+  <div class="callout teal"><strong>Validation pattern:</strong> שתי שיטות שונות שמצביעות על אותו subset מגדילות את הביטחון שלא טעית בטווח, ב־formula reference או בסינון.</div>
+</section>
+
+<section id="remove">
+  <h2><span class="section-num">6</span><span dir="ltr">Remove Duplicates</span> — כלי ניקוי, לא detector</h2>
+  <p><span dir="ltr">Remove Duplicates</span> הוא כלי מובנה:</p>
+  <div class="formula">Data → Remove Duplicates</div>
+  <p>הוא מגדיר duplicate לפי <strong>העמודות שסימנת</strong>. לכן הבחירה ב־columns משנה את משמעות הפעולה.</p>
+  <div class="compare">
+    <div class="side good">
+      <span class="role">All source columns selected</span>
+      <p>Excel מחפש שורות שזהות בכל עמודות המקור. ב־dataset הזה פעולה כזו מסירה <strong>שורה אחת</strong> — העותק הנוסף של ה־exact duplicate.</p>
+    </div>
+    <div class="side bad">
+      <span class="role">Line_ID only</span>
+      <p>Excel בודק רק את ה־key. ב־dataset הזה הוא היה מסיר <strong>שתי שורות</strong> מתוך ה־repeated keys — ובכך עלול למחוק אחת משתי גרסאות ה־<code>L0034</code> באופן שרירותי.</p>
+    </div>
+  </div>
+  <div class="callout warning"><strong>Safe practice:</strong> עבוד על copy, בדוק מה נבחר ב־dialog, תעד row count לפני/אחרי, ובמקרה של conflict אל תשתמש ב־<code>Line_ID</code> alone כבסיס למחיקה.</div>
+</section>
+
+<section id="alternatives">
+  <h2><span class="section-num">7</span>חלופות והקשרים שימושיים</h2>
+  <h3><span dir="ltr">IF</span> — מסווג, לא מזהה בעצמו</h3>
+  <div class="formula">=IF(COUNTIF($A$36:$A$96,A36)&gt;1,"Duplicate","OK")</div>
+  <p><code>IF</code> רק מתרגם את תוצאת <code>COUNTIF</code> ל־label. הוא לא מחליף את מנגנון הזיהוי.</p>
+
+  <h3><span dir="ltr">FILTER</span> — מוציא subset דינמי</h3>
+  <div class="formula">=FILTER($A$36:$J$96,COUNTIF($A$36:$A$96,$A$36:$A$96)&gt;1,"No duplicates")</div>
+  <p>ב־Excel 365 הנוסחה יכולה להחזיר רק את השורות שה־<code>Line_ID</code> שלהן חוזר. זה shortcut נוח, אבל בפרק הזה <code>COUNTIF helper → Filter</code> נשארה השיטה המרכזית כי היא יותר audit-friendly.</p>
+  <div class="callout warning"><strong>#SPILL!:</strong> <code>FILTER</code> היא Dynamic Array formula. כתוב אותה מחוץ ל־Excel Table ובאזור ריק לחלוטין, עם מקום לכל השורות והעמודות שיישפכו.</div>
+
+  <h3>אותו pattern ב־SQL</h3>
+  <div class="formula">SELECT *,
+       COUNT(*) OVER (PARTITION BY Line_ID) AS Line_ID_Count
+FROM orders;</div>
+  <p>זה אותו רעיון אנליטי: לכל row מחשבים כמה פעמים ה־key שלה מופיע. ואם רוצים רק את ה־keys שחוזרים:</p>
+  <div class="formula">SELECT Line_ID, COUNT(*) AS cnt
+FROM orders
+GROUP BY Line_ID
+HAVING COUNT(*) &gt; 1;</div>
+  <div class="callout purple"><strong>Transferable concept:</strong> הכלי משתנה בין Excel ל־SQL, אבל pattern החשיבה נשאר: define grain → test key behavior → isolate anomalies → inspect context.</div>
+</section>
+
+<section id="independent">
+  <h2>Independent Variation — למה <span dir="ltr">Order_ID</span> שונה?</h2>
+  <p>אם מריצים את אותו <code>COUNTIF</code> על <code>Order_ID</code>, נקבל לא מעט counts מעל 1. זה לא מצדיק מחיקה.</p>
+  <div class="callout"><strong>Why?</strong> <code>Order_ID</code> מזהה Order, אבל ה־grain של הטבלה הוא Order Line. לכן Order אחד יכול להכיל כמה rows לגיטימיים. זו דוגמה לכך ש־duplicate detection תמיד תלוי ב־business grain.</div>
+</section>
+
+<section id="mistakes">
+  <h2><span class="section-num">8</span><span dir="ltr">Common Mistakes & Traps</span></h2>
+  <div class="grid">
+    <article class="card"><div class="term">Repeated = Duplicate</div><p>לא נכון. repeated parent key יכול להיות תקין לחלוטין.</p></article>
+    <article class="card"><div class="term">COUNTIF &gt; 1 = Exact Duplicate</div><p>לא נכון. זה רק repeated key; צריך להשוות את שאר השדות.</p></article>
+    <article class="card"><div class="term">Remove Duplicates blindly</div><p>מסוכן. התוצאה תלויה ב־columns שסומנו.</p></article>
+    <article class="card"><div class="term">Moving range</div><p>אם לא נועלים את full key range, Fill Down משנה את טווח הבדיקה ויוצר logic שבור.</p></article>
+    <article class="card"><div class="term">Visual scan only</div><p>טוב ל־quick check, פחות טוב ל־repeatability ו־audit trail.</p></article>
+    <article class="card"><div class="term">RTL confusion</div><p>כיוון הגיליון לא משנה את משמעות ה־references. <code>$A$36</code> נשאר absolute reference בלי קשר למיקום הוויזואלי.</p></article>
+  </div>
+</section>
+
+<section id="workflow">
+  <h2>Model Analyst Workflow</h2>
+  <div class="checklist">
+    <div class="check"><strong>Define the grain:</strong> one row = one order line.</div>
+    <div class="check"><strong>Identify expected unique key:</strong> Line_ID.</div>
+    <div class="check"><strong>Build a repeatable check:</strong> COUNTIF with fixed range.</div>
+    <div class="check"><strong>Filter the anomalies:</strong> Line_ID_Count &gt; 1.</div>
+    <div class="check"><strong>Compare source fields:</strong> exact duplicate vs key conflict.</div>
+    <div class="check"><strong>Validate independently:</strong> Conditional Formatting.</div>
+    <div class="check"><strong>Choose action based on evidence:</strong> remove only when the duplicate definition is justified.</div>
+    <div class="check"><strong>Preserve evidence:</strong> keep raw columns and work on a copy before destructive cleaning.</div>
+  </div>
+</section>
+
+<section id="takeaway">
+  <h2>Key Takeaway</h2>
+  <div class="callout success">
+    <strong>Duplicate cleaning is not “find repeated values and delete them”.</strong><br>
+    קודם מגדירים grain ו־key, אחר כך מזהים repeated keys, משווים את הרשומות, מסווגים את הבעיה, ורק אז מחליטים אם להסיר, לחקור או להשאיר.
+  </div>
+  <div class="flow" aria-label="Key takeaway flow"><span>Detect</span><b class="arrow">→</b><span>Isolate</span><b class="arrow">→</b><span>Compare</span><b class="arrow">→</b><span>Classify</span><b class="arrow">→</b><span>Decide</span><b class="arrow">→</b><span>Validate</span></div>
+</section>
+
+<footer>Course Chapter 01 · Original Worksheet: 01_DUPLICATES · Excel Data Cleaning Practice</footer>
+</div>
+<a class="back-top" href="#top">↑ למעלה</a>
+</body>
+</html>

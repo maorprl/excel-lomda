@@ -1,0 +1,6 @@
+*.xlsx binary
+*.xlsm binary
+*.html text
+*.md text
+*.txt text
+*.csv text

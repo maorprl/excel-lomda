@@ -1,0 +1,13 @@
+# Excel temporary lock files
+~$*.xlsx
+~$*.xlsm
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+
+# Local scratch only
+scratch/
+temp/
